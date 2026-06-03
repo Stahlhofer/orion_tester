@@ -22,8 +22,13 @@ class ImportController extends ChangeNotifier {
   Future<String> exportPdf(
     List<TestItem> items,
     String routineName,
+    String message,
   ) async {
-    File file = await _pdfService.generate(items, routineName);
+    File file = await _pdfService.generate(
+      items,
+      routineName,
+      message,
+    );
 
     return file.path;
   }

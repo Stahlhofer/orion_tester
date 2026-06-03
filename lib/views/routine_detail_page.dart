@@ -5,6 +5,7 @@ import 'package:orion_tester/controllers/import_controller.dart';
 import '../controllers/routine_detail_controller.dart';
 import '../models/routine.dart';
 import '../models/test_item.dart';
+import '../views/export_pdf_dialog.dart';
 import '../views/new_test_dialog.dart';
 import '../widgets/test_card.dart';
 
@@ -112,11 +113,26 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     }
   }
 
-  void _exportarPDF() async {
+  Future<void> _showExportPdfDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return ExportPdfDialog(
+          routineName: widget.routine.fullName,
+          onExport: (message) {
+            _exportarPDF(message);
+          },
+        );
+      },
+    );
+  }
+
+  void _exportarPDF(String? message) async {
     try {
       String path = await controller.exportPdf(
         _controller.tests,
         _controller.routine?.name ?? "padrão",
+        message ?? '',
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,7 +161,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
         surfaceTintColor: Theme.of(context).colorScheme.surfaceBright,
         actions: [
           ElevatedButton(
-            onPressed: _exportarPDF,
+            onPressed: _showExportPdfDialog,
             child: Text(
               'PDF',
               style: TextStyle(color: Colors.white, fontSize: 16),

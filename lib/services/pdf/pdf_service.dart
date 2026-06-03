@@ -94,38 +94,35 @@ class PdfService {
     );
   }
 
-  pw.Container _buildAssinatura() {
-    return pw.Container(
-      child: pw.Row(
-        mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
-        children: [
-          pw.Column(
-            children: [
-              pw.Container(width: 200, child: pw.Divider()),
-              pw.Text(
-                'Executor do Teste',
-                style: const pw.TextStyle(fontSize: 11),
-              ),
-            ],
-          ),
+  pw.Row _buildAssinatura() {
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        assinatura('Técnico Orion'),
+        assinatura('Técnico Cliente'),
+      ],
+    );
+  }
 
-          pw.Column(
-            children: [
-              pw.Container(width: 200, child: pw.Divider()),
-              pw.Text(
-                'Acompanhou o Teste',
-                style: const pw.TextStyle(fontSize: 11),
-              ),
-            ],
+  pw.Widget assinatura(String texto) {
+    return pw.Column(
+      children: [
+        pw.Container(
+          width: 160,
+          decoration: const pw.BoxDecoration(
+            border: pw.Border(top: pw.BorderSide()),
           ),
-        ],
-      ),
+        ),
+        pw.SizedBox(height: 5),
+        pw.Text(texto, style: pw.TextStyle(fontSize: 10)),
+      ],
     );
   }
 
   Future<File> generate(
     List<TestItem> items,
     String routineName,
+    String message,
   ) async {
     var regular = pw.Font.ttf(
       await rootBundle.load("assets/fonts/OpenSans-Medium.ttf"),
@@ -149,18 +146,74 @@ class PdfService {
         maxPages: 30,
         margin: const pw.EdgeInsets.all(20),
         pageFormat: PdfPageFormat.a4,
-        footer: (context) {
-          if (context.pageNumber == context.pagesCount) {
-            return _buildAssinatura();
-          }
-
-          return pw.SizedBox();
-        },
         build: (context) => [
           _buildHeader(routineName),
 
           _buildTable(items),
         ],
+      ),
+    );
+
+    pdf.addPage(
+      pw.Page(
+        margin: const pw.EdgeInsets.all(20),
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Column(
+            children: [
+              pw.Container(
+                height: 180,
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(
+                    width: 2,
+                    color: PdfColors.black,
+                  ),
+                ),
+                child: pw.Column(
+                  children: [
+                    // Cabeçalho
+                    pw.Container(
+                      height: 25,
+                      width: double.infinity,
+                      padding: const pw.EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      alignment: pw.Alignment.centerLeft,
+                      decoration: const pw.BoxDecoration(
+                        border: pw.Border(
+                          bottom: pw.BorderSide(
+                            width: 2,
+                            color: PdfColors.black,
+                          ),
+                        ),
+                      ),
+                      child: pw.Text(
+                        'Observações',
+                        style: const pw.TextStyle(fontSize: 12),
+                      ),
+                    ),
+
+                    // Área de observações
+                    pw.Expanded(
+                      child: pw.Container(
+                        width: double.infinity,
+                        padding: const pw.EdgeInsets.all(8),
+                        child: pw.Text(
+                          message,
+                          style: const pw.TextStyle(fontSize: 10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              pw.Spacer(),
+
+              _buildAssinatura(),
+            ],
+          );
+        },
       ),
     );
 

@@ -26,9 +26,14 @@ class DatabaseHelper {
   }
 
   String _buildDatabasePath() {
-    final folder = Directory.current.path;
-    print('$folder${Platform.pathSeparator}');
-    return '$folder${Platform.pathSeparator}orion_tester.db';
+    final String folder = Platform.environment['UserProfile'] ?? '';
+    final String user = folder.split('\\')[2];
+
+    // final pathDb = '$folder${Platform.pathSeparator}orion_tester.db';
+    final basePath = const String.fromEnvironment('PATH');
+    final pathDb = 'C:\\Users\\$user\\$basePath';
+
+    return pathDb;
   }
 
   Future<void> _createDatabase(Database db, int version) async {
