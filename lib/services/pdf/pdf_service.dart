@@ -161,55 +161,56 @@ class PdfService {
         build: (context) {
           return pw.Column(
             children: [
-              pw.Container(
-                height: 180,
-                decoration: pw.BoxDecoration(
-                  border: pw.Border.all(
-                    width: 2,
-                    color: PdfColors.black,
+              pw.Flexible(
+                child: pw.Container(
+                  // height: 180,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(
+                      width: 2,
+                      color: PdfColors.black,
+                    ),
                   ),
-                ),
-                child: pw.Column(
-                  children: [
-                    // Cabeçalho
-                    pw.Container(
-                      height: 25,
-                      width: double.infinity,
-                      padding: const pw.EdgeInsets.symmetric(
-                        horizontal: 8,
+                  child: pw.Column(
+                    children: [
+                      // Cabeçalho
+                      pw.Container(
+                        height: 25,
+                        width: double.infinity,
+                        padding: const pw.EdgeInsets.symmetric(
+                          horizontal: 8,
+                        ),
+                        alignment: pw.Alignment.centerLeft,
+                        decoration: const pw.BoxDecoration(
+                          border: pw.Border(
+                            bottom: pw.BorderSide(
+                              width: 2,
+                              color: PdfColors.black,
+                            ),
+                          ),
+                        ),
+                        child: pw.Text(
+                          'Observações',
+                          style: const pw.TextStyle(fontSize: 12),
+                        ),
                       ),
-                      alignment: pw.Alignment.centerLeft,
-                      decoration: const pw.BoxDecoration(
-                        border: pw.Border(
-                          bottom: pw.BorderSide(
-                            width: 2,
-                            color: PdfColors.black,
+
+                      // Área de observações
+                      pw.Flexible(
+                        child: pw.Container(
+                          width: double.infinity,
+                          padding: const pw.EdgeInsets.all(8),
+                          child: pw.Text(
+                            message,
+                            style: const pw.TextStyle(fontSize: 10),
                           ),
                         ),
                       ),
-                      child: pw.Text(
-                        'Observações',
-                        style: const pw.TextStyle(fontSize: 12),
-                      ),
-                    ),
-
-                    // Área de observações
-                    pw.Expanded(
-                      child: pw.Container(
-                        width: double.infinity,
-                        padding: const pw.EdgeInsets.all(8),
-                        child: pw.Text(
-                          message,
-                          style: const pw.TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 
-              pw.Spacer(),
-
+              pw.SizedBox(height: 100),
               _buildAssinatura(),
             ],
           );

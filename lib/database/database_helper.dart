@@ -17,8 +17,9 @@ class DatabaseHelper {
     _database = await databaseFactory.openDatabase(
       dbPath,
       options: OpenDatabaseOptions(
-        version: 1,
+        version: 2,
         onCreate: _createDatabase,
+        onUpgrade: _onUpgrade,
       ),
     );
 
@@ -43,7 +44,8 @@ class DatabaseHelper {
         name TEXT NOT NULL,
         date TEXT NOT NULL,
         full_name TEXT NOT NULL,
-        created_at TEXT NOT NULL
+        created_at TEXT NOT NULL,
+        observations TEXT,
       );
     ''');
 
@@ -61,5 +63,18 @@ class DatabaseHelper {
         FOREIGN KEY(routine_id) REFERENCES routines(id)
       );
     ''');
+  }
+
+  Future<void> _onUpgrade(
+    Database db,
+    int oldVersion,
+    int newVersion,
+  ) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+      ALTER TABLE routines
+      ADD COLUMN observations TEXT
+    ''');
+    }
   }
 }

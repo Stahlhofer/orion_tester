@@ -30,6 +30,16 @@ class RoutineRepository {
     return Routine.fromMap(result.first);
   }
 
+  Future<void> update(int id, Routine routine) async {
+    final db = await _databaseHelper.database;
+    await db.update(
+      'routines',
+      routine.toMap(),
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<void> delete(int id) async {
     final db = await _databaseHelper.database;
     await db.delete('routines', where: 'id = ?', whereArgs: [id]);

@@ -4,6 +4,7 @@ class Routine {
   final String date;
   final String fullName;
   final String createdAt;
+  final String observations;
 
   Routine({
     this.id,
@@ -11,6 +12,7 @@ class Routine {
     required this.date,
     required this.fullName,
     required this.createdAt,
+    required this.observations,
   });
 
   Routine copyWith({
@@ -19,6 +21,7 @@ class Routine {
     String? date,
     String? fullName,
     String? createdAt,
+    String? observations,
   }) {
     return Routine(
       id: id ?? this.id,
@@ -26,6 +29,7 @@ class Routine {
       date: date ?? this.date,
       fullName: fullName ?? this.fullName,
       createdAt: createdAt ?? this.createdAt,
+      observations: observations ?? this.observations,
     );
   }
 
@@ -36,6 +40,7 @@ class Routine {
       'date': date,
       'full_name': fullName,
       'created_at': createdAt,
+      'observations': observations,
     }..removeWhere((key, value) => value == null);
   }
 
@@ -46,6 +51,7 @@ class Routine {
       date: map['date'] as String,
       fullName: map['full_name'] as String,
       createdAt: map['created_at'] as String,
+      observations: map['observations'] as String? ?? '',
     );
   }
 }

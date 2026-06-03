@@ -20,7 +20,15 @@ class RoutineService {
       date: isoDate,
       fullName: fullName,
       createdAt: DateTime.now().toIso8601String(),
+      observations: '',
     );
     return _repository.insert(routine);
   }
+
+  Future<void> updateRoutine(Routine routine) async {
+    if (routine.id == null) return;
+    await _repository.update(routine.id!, routine);
+  }
+
+  Future<Routine?> findById(int id) => _repository.findById(id);
 }

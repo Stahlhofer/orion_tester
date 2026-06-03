@@ -96,9 +96,9 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
 
       await controller.import(result.files.single.path!);
 
-      controller.items.forEach((item) {
+      for (var item in controller.items) {
         _controller.addTest(item.name, item.address, item.comment);
-      });
+      }
 
       setState(() {});
 
@@ -118,7 +118,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
       context: context,
       builder: (context) {
         return ExportPdfDialog(
-          routineName: widget.routine.fullName,
+          routine: widget.routine,
           onExport: (message) {
             _exportarPDF(message);
           },
@@ -154,6 +154,8 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('observation: ${widget.routine.observations}');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.routine.fullName),
