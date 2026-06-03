@@ -58,6 +58,12 @@ class _RoutineListPageState extends State<RoutineListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 150,
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Image.asset('assets/logo/logo.png', scale: 1),
+        ),
+        centerTitle: true,
         title: const Text('Rotinas de Teste'),
         backgroundColor: Theme.of(context).colorScheme.surfaceBright,
         surfaceTintColor: Theme.of(context).colorScheme.surfaceBright,
