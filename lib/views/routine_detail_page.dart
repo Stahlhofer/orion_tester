@@ -65,11 +65,20 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancelar'),
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.red),
+              ),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Excluir'),
+              child: const Text(
+                'Excluir',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
             ),
           ],
         );
@@ -163,6 +172,11 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
         surfaceTintColor: Theme.of(context).colorScheme.surfaceBright,
         actions: [
           ElevatedButton(
+            style: ButtonStyle(
+              mouseCursor: WidgetStatePropertyAll(
+                SystemMouseCursors.click,
+              ),
+            ),
             onPressed: _showExportPdfDialog,
             child: Text(
               'PDF',
@@ -171,6 +185,11 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           ),
           SizedBox(width: 8),
           ElevatedButton(
+            style: ButtonStyle(
+              mouseCursor: WidgetStatePropertyAll(
+                SystemMouseCursors.click,
+              ),
+            ),
             onPressed: _importFile,
             child: Text(
               'Importar',
@@ -179,6 +198,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           ),
           SizedBox(width: 8),
           IconButton(
+            mouseCursor: SystemMouseCursors.click,
             icon: const Icon(Icons.delete),
             tooltip: 'Apagar todos os testes',
             onPressed: _confirmDeleteAllTests,

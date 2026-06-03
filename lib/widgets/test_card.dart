@@ -229,24 +229,27 @@ class _TestCardState extends State<TestCard> {
   }) {
     return Row(
       children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: value
-                  ? activeColor.withAlpha(30)
-                  : inactiveColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: value ? activeColor : inactiveColor,
-                width: 2,
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: value
+                    ? activeColor.withAlpha(30)
+                    : inactiveColor.withAlpha(30),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: value ? activeColor : inactiveColor,
+                  width: 2,
+                ),
               ),
-            ),
-            child: Icon(
-              value ? Icons.check : Icons.close,
-              color: value ? activeColor : inactiveColor,
+              child: Icon(
+                value ? Icons.check : Icons.close,
+                color: value ? activeColor : inactiveColor,
+              ),
             ),
           ),
         ),

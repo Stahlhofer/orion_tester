@@ -20,14 +20,21 @@ class CustomButton extends StatelessWidget {
         ? Theme.of(context).colorScheme.primary
         : Colors.white24;
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        padding:
-            padding ??
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(color),
+        padding: WidgetStatePropertyAll(
+          padding ??
+              const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 14,
+              ),
         ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.click),
       ),
       onPressed: onPressed,
       child: Text(

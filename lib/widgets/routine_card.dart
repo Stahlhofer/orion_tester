@@ -28,6 +28,7 @@ class RoutineCard extends StatelessWidget {
       color: Theme.of(context).cardColor,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
+        mouseCursor: SystemMouseCursors.click,
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Padding(
@@ -59,6 +60,7 @@ class RoutineCard extends StatelessWidget {
               Column(
                 children: [
                   IconButton(
+                    mouseCursor: SystemMouseCursors.click,
                     onPressed: onDelete,
                     icon: Icon(
                       Icons.delete_rounded,
