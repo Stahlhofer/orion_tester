@@ -87,7 +87,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
   void _importFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
-        allowedExtensions: ['csv', 'xlsx'],
+        allowedExtensions: ['csv', 'xlsx', 'xml'],
         type: FileType.custom,
       );
 
