@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:orion_tester/controllers/import_controller.dart';
+import 'package:orion_tester/widgets/detail_header.dart';
+import 'package:orion_tester/widgets/filtro_aprovado.dart';
 
 import '../controllers/routine_detail_controller.dart';
 import '../models/routine.dart';
@@ -20,6 +22,9 @@ class RoutineDetailPage extends StatefulWidget {
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
   final controller = ImportController();
+  final TextEditingController textController =
+      TextEditingController();
+  List<TestItem> testes = [];
   late final RoutineDetailController _controller;
 
   @override
@@ -27,12 +32,23 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     super.initState();
     _controller = RoutineDetailController();
     _controller.loadTests(widget.routine);
+
+    testes = _controller.filterTests;
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(RoutineDetailPage oldWidget) {
+    if (testes.hashCode != _controller.filterTests.hashCode) {
+      testes = _controller.filterTests;
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   Future<void> _handleAddTest() async {
@@ -92,6 +108,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
 
   void _updateTestItem(TestItem item) {
     _controller.updateTest(item);
+    setState(() {});
   }
 
   void _importFile() async {
@@ -139,7 +156,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
   void _exportarPDF(String? message) async {
     try {
       String path = await controller.exportPdf(
-        _controller.tests,
+        testes,
         _controller.routine?.name ?? "padrão",
         message ?? '',
       );
@@ -161,10 +178,32 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     }
   }
 
+  void loadFilterTested(FiltroTestado testado) {
+    setState(() {
+      _controller.filterTestado = testado;
+      _controller.loadTests(widget.routine);
+    });
+    return;
+  }
+
+  void loadFilterApproved(FiltroAprovado aprovado) {
+    setState(() {
+      _controller.filterAprovado = aprovado;
+      _controller.loadTests(widget.routine);
+    });
+    return;
+  }
+
+  void loadFilterName(String texto) {
+    setState(() {
+      _controller.filterName = texto.trim();
+      _controller.loadTests(widget.routine);
+    });
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('observation: ${widget.routine.observations}');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.routine.fullName),
@@ -217,46 +256,25 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: Theme.of(context).cardColor,
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildIndicator(
-                          label: 'Total de Testes',
-                          value: _controller.totalTests.toString(),
-                        ),
-                        _buildIndicator(
-                          label: 'Testados',
-                          value: _controller.testedCount.toString(),
-                          color: Colors.greenAccent,
-                        ),
-                        _buildIndicator(
-                          label: 'Pendentes',
-                          value: _controller.pendingCount.toString(),
-                          color: Colors.redAccent,
-                        ),
-                      ],
-                    ),
-                  ),
+                DetailHeader(
+                  controller: _controller,
+                  filtroTestado: loadFilterTested,
+                  filtroAprovado: loadFilterApproved,
+                  filtroNome: loadFilterName,
+                  totalElements: testes.length,
                 ),
                 const SizedBox(height: 20),
+
                 Expanded(
-                  child: _controller.tests.isEmpty
+                  child: testes.isEmpty
                       ? const Center(
                           child: Text('Nenhum teste cadastrado.'),
                         )
                       : ListView.builder(
-                          itemCount: _controller.tests.length,
+                          itemCount: testes.length,
                           itemBuilder: (context, index) {
-                            final item = _controller.tests[index];
+                            final item = testes[index];
+
                             return TestCard(
                               item: item,
                               onCommentChanged: (comment) {
@@ -294,33 +312,6 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
         onPressed: _handleAddTest,
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _buildIndicator({
-    required String label,
-    required String value,
-    Color? color,
-  }) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            value,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(color: color),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: color?.withAlpha(150),
-            ),
-          ),
-        ],
       ),
     );
   }
